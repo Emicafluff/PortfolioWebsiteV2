@@ -50,11 +50,13 @@ body {
     position: fixed;
     pointer-events: none;
     z-index: 9999;
-    transform: translate(-50%, -50%);
+    /* FIX: use left/top for positioning, keep transform only for centering & scale */
+    transform: translate(-50%, -50%) scale(1);
     font-size: 22px;
     line-height: 1;
     filter: drop-shadow(0 0 6px var(--coral));
     transition: transform 0.08s;
+    opacity: 0; /* hidden until mouse moves */
 }
 
 .cursor-sparkle {
@@ -106,9 +108,10 @@ body {
     50%       { opacity: 0; }
 }
 
+/* FIX: scroll hint animation — only animate Y, don't touch X */
 @keyframes fadeSlideUp {
-    from { opacity: 0; transform: translateY(16px); }
-    to   { opacity: 1; transform: translateY(0); }
+    from { opacity: 0; transform: translateX(-50%) translateY(16px); }
+    to   { opacity: 1; transform: translateX(-50%) translateY(0); }
 }
 
 @keyframes shimmer {
@@ -358,15 +361,17 @@ body {
     flex-wrap: wrap;
 }
 
+/* FIX: footer buttons now visible by default, not just on hover */
 .footer-links a {
     font-family: var(--body);
     font-weight: 700;
     font-size: 0.85rem;
-    color: var(--coral);
+    color: var(--soft);
     text-decoration: none;
     padding: 6px 20px;
     border-radius: var(--radius-pill);
     border: 2px solid var(--magenta);
+    background: rgba(194, 67, 95, 0.25);
     transition: all 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
@@ -898,7 +903,6 @@ body {
     transform: translateY(-6px);
 }
 
-/* subtle inner glow */
 .meet-card::before {
     content: '';
     position: absolute;
@@ -912,7 +916,6 @@ body {
     box-shadow: 0 6px 0 var(--coral), 0 12px 40px rgba(39,35,68,0.12);
 }
 
-/* Photo circle */
 .meet-photo-wrap {
     position: relative;
     width: 150px;
@@ -944,7 +947,6 @@ body {
     background: linear-gradient(135deg, var(--coral), var(--tomato));
 }
 
-/* Badge */
 .meet-badge {
     display: inline-block;
     background: var(--magenta);
@@ -1002,7 +1004,6 @@ body {
     margin-top: 0.25rem;
 }
 
-/* Pills inside meet cards need light-background-friendly colours */
 .meet-tags .stat-pill {
     background: var(--blush);
     border-color: var(--magenta);
@@ -1012,7 +1013,6 @@ body {
     display: inline-flex;
     align-items: center;
     gap: 4px;
-    /* prevent emoji from being clipped or rendered as text */
     font-family: var(--body), 'Apple Color Emoji', 'Segoe UI Emoji', sans-serif;
     line-height: 1.4;
     white-space: nowrap;
@@ -1066,7 +1066,6 @@ body {
     animation: floatBob ease-in-out infinite;
 }
 
-/* stagger the float on each card */
 .hobby-card:nth-child(1) .hobby-icon { animation-duration: 3.8s; animation-delay: 0s; }
 .hobby-card:nth-child(2) .hobby-icon { animation-duration: 4.4s; animation-delay: -1s; }
 .hobby-card:nth-child(3) .hobby-icon { animation-duration: 3.5s; animation-delay: -2s; }
@@ -1088,11 +1087,8 @@ body {
     line-height: 1.6;
 }
 
-/* Responsive — meet grid stacks on mobile */
 @media (max-width: 768px) {
-    .meet-grid {
-        grid-template-columns: 1fr;
-    }
+    .meet-grid { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 480px) {
@@ -1135,9 +1131,7 @@ body {
     transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.skill:hover {
-    transform: translateY(-3px);
-}
+.skill:hover { transform: translateY(-3px); }
 
 .skill h4 {
     font-family: var(--display);
@@ -1155,9 +1149,7 @@ body {
 }
 
 /* Programs */
-.programs-section {
-    margin-bottom: 1rem;
-}
+.programs-section { margin-bottom: 1rem; }
 
 .programs-note {
     font-family: var(--body);
@@ -1230,9 +1222,7 @@ body {
     transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.experience-item:hover {
-    transform: translateY(-3px);
-}
+.experience-item:hover { transform: translateY(-3px); }
 
 .experience-item h4 {
     font-family: var(--display);
@@ -1313,9 +1303,7 @@ body {
     line-height: 1.7;
 }
 
-.info-item {
-    margin-bottom: 1.5rem;
-}
+.info-item { margin-bottom: 1.5rem; }
 
 .info-item h4 {
     font-family: var(--display);
@@ -1338,9 +1326,7 @@ body {
     transition: color 0.2s;
 }
 
-.info-item a:hover {
-    color: var(--lobster);
-}
+.info-item a:hover { color: var(--lobster); }
 
 .social-links {
     display: flex;
@@ -1371,9 +1357,7 @@ body {
 }
 
 /* Form */
-.form-group {
-    margin-bottom: 1.5rem;
-}
+.form-group { margin-bottom: 1.5rem; }
 
 .form-group label {
     display: block;
@@ -1450,9 +1434,7 @@ body {
     flex-shrink: 0;
 }
 
-.jam-nav-info {
-    padding: 0.5rem 1rem 0.5rem 0;
-}
+.jam-nav-info { padding: 0.5rem 1rem 0.5rem 0; }
 
 .jam-nav-info h3 {
     font-family: var(--display);
@@ -1477,20 +1459,15 @@ body {
         grid-template-columns: 1fr;
         direction: ltr;
     }
-
-    .portfolio-image {
-        height: 220px;
-    }
+    .portfolio-image { height: 220px; }
 }
 
 @media (max-width: 768px) {
     html { font-size: 15px; }
-
     .nav-container { padding: 0 16px; }
     .nav-menu { gap: 0.2rem; }
     .nav-link { padding: 6px 10px; font-size: 0.82rem; }
     .logo { font-size: 1rem; }
-
     .dropdown-menu {
         position: static;
         opacity: 1;
@@ -1503,50 +1480,26 @@ body {
         border-right: none;
         border-top: none;
     }
-
     .dropdown-link { padding-left: 32px; }
-
     .page-header { padding: 48px 0; }
     .page-header h1 { font-size: 1.8rem; }
-
-    .project-header-info {
-        grid-template-columns: 1fr;
-    }
-
-    .contact-wrapper {
-        grid-template-columns: 1fr;
-    }
-
-    .skills-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .gallery-container {
-        flex-direction: column;
-    }
-
+    .project-header-info { grid-template-columns: 1fr; }
+    .contact-wrapper { grid-template-columns: 1fr; }
+    .skills-grid { grid-template-columns: 1fr; }
+    .gallery-container { flex-direction: column; }
     .gallery-btn { width: 100%; }
-
     .jam-nav-grid { grid-template-columns: 1fr; }
-
     .itch-io-section { flex-direction: column; text-align: center; }
-
     .footer-links { gap: 0.75rem; }
 }
 
 @media (max-width: 480px) {
     html { font-size: 14px; }
-
     .container { padding: 0 16px; }
-
     .nav-menu { gap: 0.1rem; }
     .nav-link { padding: 5px 8px; font-size: 0.78rem; }
-
     .btn { padding: 11px 24px; font-size: 0.95rem; }
-
     .highlights-grid { grid-template-columns: 1fr; }
-
     .programs-grid { grid-template-columns: repeat(2, 1fr); }
-
     .cta-section { padding: 2rem 1.5rem; }
 }

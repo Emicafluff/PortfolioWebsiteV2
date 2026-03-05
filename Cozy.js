@@ -7,9 +7,15 @@
 
     if (!cursor) return;
 
+    // Ensure cursor is always correctly positioned
+    cursor.style.position = 'fixed';
+    cursor.style.pointerEvents = 'none';
+    cursor.style.zIndex = '9999';
+
     document.addEventListener('mousemove', e => {
         cursor.style.left = e.clientX + 'px';
         cursor.style.top  = e.clientY + 'px';
+        cursor.style.opacity = '1';
     });
 
     document.addEventListener('mouseleave', () => { cursor.style.opacity = '0'; });

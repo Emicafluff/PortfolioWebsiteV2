@@ -17,15 +17,13 @@
         align-items: center;
         justify-content: center;
         overflow: hidden;
+        /* FIX: gradient background replaces the local video file */
+        background: linear-gradient(135deg, #272344 0%, #5B2657 40%, #C2435F 100%);
     }
-    .hero-video {
-        position: absolute; inset: 0;
-        width: 100%; height: 100%;
-        object-fit: cover; z-index: 1;
-    }
+
     .video-overlay {
         position: absolute; inset: 0; z-index: 2;
-        background: radial-gradient(ellipse at center, rgba(39,35,68,0.55) 0%, rgba(39,35,68,0.85) 100%);
+        background: radial-gradient(ellipse at center, rgba(39,35,68,0.3) 0%, rgba(39,35,68,0.7) 100%);
     }
 
     /* Hero floating decos */
@@ -102,6 +100,8 @@
         display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
         animation: popIn 0.5s cubic-bezier(0.34,1.56,0.64,1) 0.3s both;
     }
+
+    /* FIX: scroll hint — remove conflicting transform, use left+translateX only */
     .scroll-hint {
         position: absolute; bottom: 28px; left: 50%;
         transform: translateX(-50%); z-index: 4;
@@ -138,7 +138,6 @@
         letter-spacing: 0.05em; text-transform: uppercase;
     }
     .char-stats { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-bottom: 1rem; }
-    /* .stat-pill now in style.css */
     .xp-row { display: flex; align-items: center; gap: 10px; }
     .xp-label { font-family: var(--body); font-weight: 700; font-size: 0.75rem; color: var(--coral); white-space: nowrap; }
     .xp-bar {
@@ -249,10 +248,6 @@
     </nav>
 
     <section class="video-hero">
-        <video class="hero-video" autoplay muted loop playsinline>
-            <source src="Bingo'sBerriesTeaser.mp4"  type="video/mp4">
-            <source src="Bingo'sberriesteaser.webm" type="video/webm">
-        </video>
         <div class="video-overlay"></div>
 
         <div class="hero-deco">🌸</div>
@@ -385,7 +380,6 @@
     </footer>
 
     <script>
-    // Typewriter — index only
     const phrases = [
         'Crafting cozy worlds and joyful gameplay 🌿',
         'Building levels that tell warm stories ✨',
@@ -410,7 +404,6 @@
     }
     type();
 
-    // XP bar
     const xpObserver = new IntersectionObserver(entries => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
