@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emily Nicolaisen — Game Designer</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+    /* ═══════════════════════════════════════════════
+       INDEX-ONLY STYLES  |  shared styles → style.css
+    ═══════════════════════════════════════════════ */
+
+    .video-hero {
+        position: relative;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+    .hero-video {
+        position: absolute; inset: 0;
+        width: 100%; height: 100%;
+        object-fit: cover; z-index: 1;
+    }
+    .video-overlay {
+        position: absolute; inset: 0; z-index: 2;
+        background: radial-gradient(ellipse at center, rgba(39,35,68,0.55) 0%, rgba(39,35,68,0.85) 100%);
+    }
+
+    /* Hero floating decos */
+    .hero-deco {
+        position: absolute; z-index: 3;
+        pointer-events: none;
+        animation: floatBob ease-in-out infinite;
+        filter: drop-shadow(0 2px 8px rgba(252,128,97,0.4));
+    }
+    .hero-deco:nth-child(1) { top:10%; left:6%;  font-size:2rem;   animation-duration:4.2s; animation-delay:0s;    }
+    .hero-deco:nth-child(2) { top:20%; right:8%; font-size:1.4rem; animation-duration:5.1s; animation-delay:-1.5s; }
+    .hero-deco:nth-child(3) { top:65%; left:5%;  font-size:1.8rem; animation-duration:3.8s; animation-delay:-0.8s; }
+    .hero-deco:nth-child(4) { top:75%; right:6%; font-size:1.3rem; animation-duration:4.6s; animation-delay:-2.2s; }
+    .hero-deco:nth-child(5) { top:45%; left:2%;  font-size:1.1rem; animation-duration:5.4s; animation-delay:-3s;   }
+    .hero-deco:nth-child(6) { top:35%; right:3%; font-size:1.6rem; animation-duration:4s;   animation-delay:-1s;   }
+
+    .hero-content {
+        position: relative; z-index: 4;
+        display: flex; flex-direction: column; align-items: center;
+        gap: 1.5rem; padding: 0 24px; max-width: 800px; text-align: center;
+    }
+    .hero-badge {
+        background: var(--magenta); color: var(--soft);
+        font-family: var(--display); font-size: 1rem;
+        padding: 8px 28px; border-radius: var(--radius-pill);
+        letter-spacing: 0.05em;
+        box-shadow: 0 4px 0 var(--purple), 0 6px 20px rgba(194,67,95,0.5);
+        animation: popIn 0.5s cubic-bezier(0.34,1.56,0.64,1) both;
+    }
+    .hero-dialogue {
+        background: rgba(91,38,87,0.82);
+        border: 3px solid var(--coral);
+        border-radius: var(--radius-lg);
+        padding: 2rem 2.5rem;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 0 0 6px rgba(252,128,97,0.15),
+                    0 20px 60px rgba(39,35,68,0.6),
+                    inset 0 1px 0 rgba(253,191,175,0.2);
+        position: relative; width: 100%;
+        animation: popIn 0.5s cubic-bezier(0.34,1.56,0.64,1) 0.1s both;
+    }
+    .hero-dialogue::before,
+    .hero-dialogue::after {
+        content: '●'; position: absolute;
+        color: var(--coral); font-size: 0.5rem; opacity: 0.6;
+    }
+    .hero-dialogue::before { top:12px; left:16px; }
+    .hero-dialogue::after  { top:12px; right:16px; }
+
+    .hero-title {
+        font-family: var(--display);
+        font-size: clamp(1.8rem, 5vw, 3.2rem);
+        color: var(--soft); letter-spacing: 0.02em;
+        line-height: 1.2; margin-bottom: 0.75rem;
+    }
+    .hero-title span { color: var(--coral); }
+    .hero-subtitle {
+        font-family: var(--body); font-size: 1.05rem;
+        color: var(--blush); font-weight: 500;
+        line-height: 1.7; min-height: 1.7em;
+    }
+    .typewriter-cursor {
+        display: inline-block; width: 2px; height: 1em;
+        background: var(--coral); vertical-align: text-bottom;
+        margin-left: 2px; border-radius: 2px;
+        animation: blink 0.8s step-end infinite;
+    }
+    .dialogue-next {
+        display: block; text-align: right; margin-top: 0.75rem;
+        font-size: 0.75rem; color: var(--coral); font-weight: 700;
+        animation: blink 1s step-end infinite;
+    }
+    .hero-buttons {
+        display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
+        animation: popIn 0.5s cubic-bezier(0.34,1.56,0.64,1) 0.3s both;
+    }
+    .scroll-hint {
+        position: absolute; bottom: 28px; left: 50%;
+        transform: translateX(-50%); z-index: 4;
+        font-family: var(--body); font-weight: 700;
+        font-size: 0.8rem; color: var(--blush);
+        display: flex; flex-direction: column; align-items: center; gap: 6px;
+        animation: fadeSlideUp 1s ease 1s both; white-space: nowrap;
+    }
+    .scroll-hint span { font-size: 1.4rem; animation: floatBob 1.4s ease-in-out infinite; }
+
+    /* Character card */
+    .character-section { background: var(--purple); padding: 60px 0 70px; }
+    .character-card {
+        background: rgba(39,35,68,0.6);
+        border: 3px solid var(--coral); border-radius: var(--radius-lg);
+        padding: 2.5rem; display: grid; grid-template-columns: auto 1fr;
+        gap: 2.5rem; align-items: center; max-width: 780px; margin: 0 auto;
+        box-shadow: 0 0 0 8px rgba(252,128,97,0.1), 0 20px 60px rgba(39,35,68,0.5);
+        backdrop-filter: blur(6px);
+    }
+    .char-avatar {
+        width: 110px; height: 110px;
+        background: linear-gradient(135deg, var(--magenta), var(--coral));
+        border-radius: 50%; border: 4px solid var(--soft);
+        display: flex; align-items: center; justify-content: center;
+        font-size: 3.2rem; flex-shrink: 0;
+        box-shadow: 0 6px 24px rgba(194,67,95,0.4);
+        animation: floatBob 4s ease-in-out infinite;
+    }
+    .char-info h3 { font-family: var(--display); font-size: 1.6rem; color: var(--soft); margin-bottom: 0.25rem; }
+    .char-role {
+        font-family: var(--body); font-weight: 700; font-size: 0.85rem;
+        color: var(--coral); margin-bottom: 1rem;
+        letter-spacing: 0.05em; text-transform: uppercase;
+    }
+    .char-stats { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-bottom: 1rem; }
+    /* .stat-pill now in style.css */
+    .xp-row { display: flex; align-items: center; gap: 10px; }
+    .xp-label { font-family: var(--body); font-weight: 700; font-size: 0.75rem; color: var(--coral); white-space: nowrap; }
+    .xp-bar {
+        flex: 1; height: 12px; background: rgba(91,38,87,0.8);
+        border-radius: var(--radius-pill); border: 2px solid var(--magenta); overflow: hidden;
+    }
+    .xp-fill {
+        height: 100%;
+        background: linear-gradient(90deg, var(--magenta), var(--coral));
+        border-radius: var(--radius-pill); width: 0%;
+        transition: width 1.2s cubic-bezier(0.22,1,0.36,1) 0.3s;
+        box-shadow: 0 0 8px var(--coral);
+    }
+
+    /* Featured section */
+    .featured { background: var(--indigo); padding: 70px 0 90px; }
+    .section-header { text-align: center; margin-bottom: 3rem; }
+    .section-label {
+        display: block; font-family: var(--body); font-weight: 700;
+        font-size: 0.8rem; color: var(--coral);
+        background: rgba(194,67,95,0.15); border: 2px solid var(--magenta);
+        border-radius: var(--radius-pill); padding: 5px 18px;
+        letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.75rem;
+        width: fit-content; margin-left: auto; margin-right: auto;
+    }
+    .section-title {
+        font-family: var(--display); font-size: clamp(1.6rem,4vw,2.4rem);
+        color: var(--soft); letter-spacing: 0.02em;
+    }
+    .projects-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px,1fr));
+        gap: 2rem;
+    }
+    .project-card {
+        background: var(--purple); border: 3px solid var(--magenta);
+        border-radius: var(--radius-lg); overflow: hidden; position: relative;
+        transition: transform 0.22s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.22s;
+        box-shadow: 0 6px 0 var(--magenta), 0 10px 40px rgba(39,35,68,0.4);
+    }
+    .project-card:hover {
+        transform: translateY(-8px) rotate(-0.5deg);
+        box-shadow: 0 14px 0 var(--magenta), 0 20px 50px rgba(39,35,68,0.5);
+    }
+    .card-ribbon {
+        position: absolute; top: 14px; right: -8px;
+        background: var(--coral); color: var(--indigo);
+        font-family: var(--body); font-weight: 700; font-size: 0.7rem;
+        padding: 4px 16px 4px 12px; border-radius: 4px 0 0 4px;
+        letter-spacing: 0.05em; box-shadow: 2px 2px 0 rgba(39,35,68,0.3); z-index: 1;
+    }
+    .card-ribbon::after {
+        content: ''; position: absolute; right: -8px; top: 0;
+        border-top: 13px solid var(--coral); border-right: 8px solid transparent;
+    }
+    .project-card .project-image {
+        width: 100%; height: 180px;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 3rem; position: relative; overflow: hidden;
+    }
+    .project-card .project-image::after {
+        content: ''; position: absolute; inset: 0;
+        background: linear-gradient(to bottom, transparent 50%, rgba(91,38,87,0.6) 100%);
+    }
+    .project-card-body { padding: 1.25rem 1.5rem 1.75rem; }
+    .project-card h3 { font-family: var(--display); font-size: 1.15rem; color: var(--soft); margin-bottom: 0.5rem; }
+    .project-card p { font-family: var(--body); font-weight: 500; font-size: 0.9rem; color: var(--blush); line-height: 1.6; margin-bottom: 1.1rem; }
+    .project-tag {
+        background: rgba(194,67,95,0.2); border: 1.5px solid var(--magenta);
+        border-radius: var(--radius-pill); padding: 3px 11px;
+        font-family: var(--body); font-weight: 700; font-size: 0.72rem; color: var(--blush);
+    }
+
+    @media (max-width: 768px) {
+        .character-card { grid-template-columns: 1fr; text-align: center; }
+        .char-avatar { margin: 0 auto; }
+        .char-stats  { justify-content: center; }
+    }
+    @media (max-width: 480px) {
+        .hero-dialogue { padding: 1.5rem; }
+        .hero-title    { font-size: 1.6rem; }
+    }
+    </style>
+</head>
+<body>
+
+    <div id="cozy-cursor">⭐</div>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index" class="logo">Emily Nicolaisen</a>
+            <ul class="nav-menu">
+                <li><a href="index" class="nav-link active">Home</a></li>
+                <li class="nav-dropdown">
+                    <a href="portfolio" class="nav-link">Portfolio</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="YolkedAndLoaded"    class="dropdown-link">🥚 Yolked and Loaded</a></li>
+                        <li><a href="TheMemoryOfAPotion" class="dropdown-link">🧪 The Memory of a Potion</a></li>
+                        <li><a href="Dragepust"          class="dropdown-link">🐉 Dragepust — Rød Sjø</a></li>
+                        <li><a href="BingosBerries"      class="dropdown-link">🍓 Bingo's Berries</a></li>
+                        <li><a href="GameJams"           class="dropdown-link">🎮 Game Jams</a></li>
+                    </ul>
+                </li>
+                <li><a href="about"   class="nav-link">About</a></li>
+                <li><a href="contact" class="nav-link">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="video-hero">
+        <video class="hero-video" autoplay muted loop playsinline>
+            <source src="Bingo'sBerriesTeaser.mp4"  type="video/mp4">
+            <source src="Bingo'sberriesteaser.webm" type="video/webm">
+        </video>
+        <div class="video-overlay"></div>
+
+        <div class="hero-deco">🌸</div>
+        <div class="hero-deco">⭐</div>
+        <div class="hero-deco">🍄</div>
+        <div class="hero-deco">🌿</div>
+        <div class="hero-deco">✨</div>
+        <div class="hero-deco">🌼</div>
+
+        <div class="hero-content">
+            <div class="hero-badge">✨ Game Level & Design Specialist ✨</div>
+            <div class="hero-dialogue">
+                <h1 class="hero-title">Hi, I'm <span>Emily!</span></h1>
+                <p class="hero-subtitle" id="typewriter-text"><span class="typewriter-cursor"></span></p>
+                <span class="dialogue-next">▼ next</span>
+            </div>
+            <div class="hero-buttons">
+                <a href="portfolio" class="btn btn-primary">🎮 View My Work</a>
+                <a href="contact"   class="btn btn-secondary">💌 Get in Touch</a>
+            </div>
+        </div>
+
+        <div class="scroll-hint">
+            <span>🍂</span>
+            scroll to explore
+        </div>
+    </section>
+
+    <svg viewBox="0 0 1440 60" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style="display:block;width:100%;height:60px;background:#272344;">
+        <path d="M0,30 C240,60 480,0 720,30 C960,60 1200,0 1440,30 L1440,60 L0,60 Z" fill="#5B2657"/>
+    </svg>
+
+    <section class="character-section">
+        <div class="container">
+            <div class="character-card" id="char-card">
+                <div class="char-avatar">🎨</div>
+                <div class="char-info">
+                    <h3>Emily Nicolaisen</h3>
+                    <p class="char-role">🗺️ Level Designer &amp; Game Designer</p>
+                    <div class="char-stats">
+                        <div class="stat-pill">🎮 5 Projects Shipped</div>
+                        <div class="stat-pill">🗺️ 10+ Levels Designed</div>
+                        <div class="stat-pill">🏆 2 Game Jams</div>
+                        <div class="stat-pill">🛠️ Unity &amp; Unreal</div>
+                    </div>
+                    <div class="xp-row">
+                        <span class="xp-label">LVL XP</span>
+                        <div class="xp-bar"><div class="xp-fill" id="xp-fill" data-width="78%"></div></div>
+                        <span class="xp-label">78%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <svg viewBox="0 0 1440 60" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style="display:block;width:100%;height:60px;background:#5B2657;">
+        <path d="M0,30 C240,0 480,60 720,30 C960,0 1200,60 1440,30 L1440,60 L0,60 Z" fill="#272344"/>
+    </svg>
+
+    <section class="featured">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">🌟 My Work</span>
+                <h2 class="section-title">Featured Projects</h2>
+            </div>
+            <div class="projects-grid">
+
+                <div class="project-card">
+                    <div class="card-ribbon">Level Design</div>
+                    <div class="project-image" style="background:linear-gradient(135deg,#5B2657,#C2435F);">🥚</div>
+                    <div class="project-card-body">
+                        <h3>Yolked and Loaded</h3>
+                        <p>Level design for a 3D multiplayer split-screen game with chaotic egg-based fun.</p>
+                        <div class="project-tags">
+                            <span class="project-tag">Unreal</span>
+                            <span class="project-tag">3D</span>
+                            <span class="project-tag">Multiplayer</span>
+                        </div>
+                        <a href="YolkedAndLoaded" class="card-link">Learn More →</a>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="card-ribbon">Level Design</div>
+                    <div class="project-image" style="background:linear-gradient(135deg,#C2435F,#FC7351);">🧪</div>
+                    <div class="project-card-body">
+                        <h3>The Memory of a Potion</h3>
+                        <p>Environmental puzzle design in a handcrafted witch's cottage escape.</p>
+                        <div class="project-tags">
+                            <span class="project-tag">Unity</span>
+                            <span class="project-tag">Puzzle</span>
+                            <span class="project-tag">Solo</span>
+                        </div>
+                        <a href="TheMemoryOfAPotion" class="card-link">Learn More →</a>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="card-ribbon">Game Design</div>
+                    <div class="project-image" style="background:linear-gradient(135deg,#FC7351,#FDBFAF);">🍓</div>
+                    <div class="project-card-body">
+                        <h3>Bingo's Berries</h3>
+                        <p>Cozy exploration game — forage, trade, and prepare for winter as a little bear.</p>
+                        <div class="project-tags">
+                            <span class="project-tag">Unity</span>
+                            <span class="project-tag">Cozy</span>
+                            <span class="project-tag">Narrative</span>
+                        </div>
+                        <a href="BingosBerries" class="card-link">Learn More →</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <svg viewBox="0 0 1440 60" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style="display:block;width:100%;height:60px;background:#272344;">
+        <path d="M0,30 C240,60 480,0 720,30 C960,60 1200,0 1440,30 L1440,60 L0,60 Z" fill="#5B2657"/>
+    </svg>
+
+    <footer class="footer">
+        <div class="footer-inner">
+            <p>© 2026 Emily Nicolaisen Portfolio. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="contact">💌 Contact</a>
+                <a href="about">🌸 About</a>
+            </div>
+            <span class="footer-heart">🍄</span>
+        </div>
+    </footer>
+
+    <script>
+    // Typewriter — index only
+    const phrases = [
+        'Crafting cozy worlds and joyful gameplay 🌿',
+        'Building levels that tell warm stories ✨',
+        'Turning ideas into playable spaces 🗺️',
+        'Designing games with heart and care 🍓',
+    ];
+    const el = document.getElementById('typewriter-text');
+    const cursorEl = el.querySelector('.typewriter-cursor');
+    let pi = 0, ci = 0, deleting = false;
+    const textNode = document.createTextNode('');
+    el.insertBefore(textNode, cursorEl);
+    function type() {
+        const phrase = phrases[pi];
+        if (!deleting) {
+            textNode.textContent = phrase.slice(0, ci + 1); ci++;
+            if (ci === phrase.length) { deleting = true; setTimeout(type, 2000); return; }
+        } else {
+            textNode.textContent = phrase.slice(0, ci - 1); ci--;
+            if (ci === 0) { deleting = false; pi = (pi + 1) % phrases.length; setTimeout(type, 400); return; }
+        }
+        setTimeout(type, deleting ? 35 : 60);
+    }
+    type();
+
+    // XP bar
+    const xpObserver = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const fill = document.getElementById('xp-fill');
+                if (fill) fill.style.width = fill.dataset.width;
+                xpObserver.disconnect();
+            }
+        });
+    }, { threshold: 0.5 });
+    const charCard = document.getElementById('char-card');
+    if (charCard) xpObserver.observe(charCard);
+    </script>
+    <script src="cozy.js"></script>
+</body>
+</html>
