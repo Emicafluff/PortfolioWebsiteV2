@@ -294,6 +294,19 @@ body {
     box-shadow: 0 8px 0 rgba(91, 38, 87, 0.5);
 }
 
+/* FIX: hero needs light coloured secondary button */
+.video-hero .btn-secondary {
+    background: rgba(253, 191, 175, 0.15);
+    color: var(--blush);
+    border-color: var(--blush) !important;
+}
+
+.video-hero .btn-secondary:hover {
+    background: var(--magenta);
+    color: var(--soft);
+    border-color: var(--magenta) !important;
+}
+
 /* ══════════════════════════════════════════════════════════
    PAGE HEADER  (used on portfolio, project, about, contact)
 ══════════════════════════════════════════════════════════ */
