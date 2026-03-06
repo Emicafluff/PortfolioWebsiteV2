@@ -664,6 +664,14 @@ body {
     scrollbar-color: var(--magenta) var(--blush);
 }
 
+.media-gallery iframe {
+    width: 280px;
+    height: 200px;
+    border-radius: var(--radius-md);
+    flex-shrink: 0;
+    border: 2px solid var(--blush);
+}
+
 .media-gallery::-webkit-scrollbar { height: 6px; }
 .media-gallery::-webkit-scrollbar-track { background: var(--blush); border-radius: 3px; }
 .media-gallery::-webkit-scrollbar-thumb { background: var(--magenta); border-radius: 3px; }
