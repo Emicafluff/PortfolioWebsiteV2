@@ -280,16 +280,17 @@ body {
 }
 
 .btn-secondary {
-    background: rgba(253, 191, 175, 0.15);
-    color: var(--purple); /* change from var(--blush) to var(--purple) */
-    border: 2.5px solid var(--purple); /* change from var(--blush) to var(--purple) */
+    background: rgba(91, 38, 87, 0.15);
+    color: var(--purple);
+    border: 2.5px solid var(--purple) !important;
     box-shadow: 0 5px 0 rgba(91, 38, 87, 0.5);
 }
 
 .btn-secondary:hover {
     transform: translateY(-3px);
+    background: var(--magenta);
     color: var(--soft);
-    border-color: var(--coral);
+    border-color: var(--magenta) !important;
     box-shadow: 0 8px 0 rgba(91, 38, 87, 0.5);
 }
 
