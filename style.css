@@ -280,7 +280,7 @@ body {
 }
 
 .btn-secondary {
-    background: transparent;
+    background: rgba(253, 191, 175, 0.15); /* add this line */
     color: var(--blush);
     border: 2.5px solid var(--blush);
     box-shadow: 0 5px 0 rgba(91, 38, 87, 0.5);
