@@ -279,19 +279,16 @@ body {
     box-shadow: 0 2px 0 var(--purple);
 }
 
-.btn-secondary {
-    background: rgba(91, 38, 87, 0.15);
-    color: var(--purple);
-    border: 2.5px solid var(--purple) !important;
-    box-shadow: 0 5px 0 rgba(91, 38, 87, 0.5);
+.video-hero .btn-secondary {
+    background: var(--magenta) !important;
+    color: var(--soft) !important;
+    border-color: var(--magenta) !important;
 }
 
-.btn-secondary:hover {
-    transform: translateY(-3px);
-    background: var(--magenta);
-    color: var(--soft);
-    border-color: var(--magenta) !important;
-    box-shadow: 0 8px 0 rgba(91, 38, 87, 0.5);
+.video-hero .btn-secondary:hover {
+    background: var(--lobster) !important;
+    color: var(--soft) !important;
+    border-color: var(--lobster) !important;
 }
 
 /* FIX: hero needs light coloured secondary button */
