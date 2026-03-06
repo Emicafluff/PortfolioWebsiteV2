@@ -280,9 +280,9 @@ body {
 }
 
 .btn-secondary {
-    background: rgba(253, 191, 175, 0.15); /* add this line */
-    color: var(--blush);
-    border: 2.5px solid var(--blush);
+    background: rgba(253, 191, 175, 0.15);
+    color: var(--purple); /* change from var(--blush) to var(--purple) */
+    border: 2.5px solid var(--purple); /* change from var(--blush) to var(--purple) */
     box-shadow: 0 5px 0 rgba(91, 38, 87, 0.5);
 }
 
